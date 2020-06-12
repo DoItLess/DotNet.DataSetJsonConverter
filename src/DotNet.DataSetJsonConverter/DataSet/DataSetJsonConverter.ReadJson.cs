@@ -40,7 +40,7 @@ namespace DotNet.DataSetJsonConverter
 
             #region Tables
 
-            var dataTableJsonConverter = new DataTableJsonConverter(_level);
+            var dataTableJsonConverter = new DataTableJsonConverter(_level, _dateTimeFormatType);
 
             foreach (var jToken in jObject["Tables"]!)
             {

@@ -20,4 +20,16 @@
         /// </summary>
         Maximal,
     }
+
+    public enum DateTimeFormatType
+    {
+        /// <summary>
+        /// 默认
+        /// </summary>
+        Default,
+        /// <summary>
+        /// 时间戳,毫秒,long
+        /// </summary>
+        TimeStampMillisecond,
+    }
 }

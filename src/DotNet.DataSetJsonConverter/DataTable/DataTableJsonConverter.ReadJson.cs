@@ -77,9 +77,13 @@ namespace DotNet.DataSetJsonConverter
                 foreach (DataColumn col in table.Columns)
                 {
                     var jValue = jToken[col.ColumnName];
-                    row[col.ColumnName] = jValue == null
-                        ? col.DefaultValue
-                        : jValue.ToObject<object>();
+
+                    var isSpecial = Type.GetTypeCode(col.DataType) == TypeCode.DateTime && _dateTimeFormatType == DateTimeFormatType.TimeStampMillisecond;
+                    row[col.ColumnName] = isSpecial
+                        ? MillisecondsToDateTime(jValue.ToObject<long>())
+                        : jValue == null
+                            ? col.DefaultValue
+                            : jValue.ToObject<object>();
                 }
 
                 table.Rows.Add(row);

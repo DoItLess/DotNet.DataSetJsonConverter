@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Data;
+// ReSharper disable UnusedParameter.Local
 
 namespace DotNet.DataSetJsonConverter
 {
@@ -68,22 +69,7 @@ namespace DotNet.DataSetJsonConverter
 
             #region Rows
 
-            writer.WritePropertyName("Rows");
-            writer.WriteStartArray();
-            foreach (DataRow row in table.Rows)
-            {
-                writer.WriteStartObject();
-
-                foreach (DataColumn col in table.Columns)
-                {
-                    writer.WritePropertyName(col.ColumnName);
-                    writer.WriteValue(row[col.ColumnName]);
-                }
-
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
+            WriteRows(writer, table, serializer, level);
 
             #endregion
 
@@ -132,22 +118,7 @@ namespace DotNet.DataSetJsonConverter
 
             #region Rows
 
-            writer.WritePropertyName("Rows");
-            writer.WriteStartArray();
-            foreach (DataRow row in table.Rows)
-            {
-                writer.WriteStartObject();
-
-                foreach (DataColumn col in table.Columns)
-                {
-                    writer.WritePropertyName(col.ColumnName);
-                    writer.WriteValue(row[col.ColumnName]);
-                }
-
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
+            WriteRows(writer, table, serializer, level);
 
             #endregion
 
@@ -204,6 +175,15 @@ namespace DotNet.DataSetJsonConverter
 
             #region Rows
 
+            WriteRows(writer, table, serializer, level);
+
+            #endregion
+
+            writer.WriteEndObject();
+        }
+
+        private void WriteRows(JsonWriter writer, DataTable table, JsonSerializer serializer, ConvertLevel level)
+        {
             writer.WritePropertyName("Rows");
             writer.WriteStartArray();
             foreach (DataRow row in table.Rows)
@@ -213,17 +193,19 @@ namespace DotNet.DataSetJsonConverter
                 foreach (DataColumn col in table.Columns)
                 {
                     writer.WritePropertyName(col.ColumnName);
-                    writer.WriteValue(row[col.ColumnName]);
+
+                    var isSpecial = Type.GetTypeCode(col.DataType) == TypeCode.DateTime && _dateTimeFormatType == DateTimeFormatType.TimeStampMillisecond;
+
+                    var value = isSpecial
+                        ? DateTimeToMilliseconds(Convert.ToDateTime(row[col.ColumnName]))
+                        : row[col.ColumnName];
+                    writer.WriteValue(value);
                 }
 
                 writer.WriteEndObject();
             }
 
             writer.WriteEndArray();
-
-            #endregion
-
-            writer.WriteEndObject();
         }
     }
 }

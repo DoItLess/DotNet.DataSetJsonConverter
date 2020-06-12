@@ -66,7 +66,7 @@ namespace DotNet.DataSetJsonConverter
             writer.WritePropertyName("Tables");
             writer.WriteStartArray();
 
-            var dataTableJsonConverter = new DataTableJsonConverter(_level);
+            var dataTableJsonConverter = new DataTableJsonConverter(_level, _dateTimeFormatType);
             foreach (DataTable table in dataSet.Tables) dataTableJsonConverter.WriteJson(writer, table, serializer);
 
             writer.WriteEndArray();

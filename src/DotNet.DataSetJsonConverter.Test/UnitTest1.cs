@@ -122,13 +122,14 @@ namespace DotNet.DataSetJsonConverter.Test
             var relation = new DataRelation("Test.Relation1", dataTable.Columns["FRowId"], dataTable2.Columns["FParentId"]);
             dataSet.Relations.Add(relation);
 
-            var json = JsonConvert.SerializeObject(dataSet, Formatting.Indented,
-                                                   new[] {new DataSetJsonConverter(ConvertLevel.Minimal),});
+
+
+            var converter = new DataSetJsonConverter(ConvertLevel.Minimal, DateTimeFormatType.TimeStampMillisecond);
+            var json = JsonConvert.SerializeObject(dataSet, Formatting.Indented,converter);
 
             Console.WriteLine(json);
 
-
-            var ds = JsonConvert.DeserializeObject<DataSet>(json, new DataSetJsonConverter(ConvertLevel.Minimal));
+            var ds = JsonConvert.DeserializeObject<DataSet>(json, converter);
         }
 
 
