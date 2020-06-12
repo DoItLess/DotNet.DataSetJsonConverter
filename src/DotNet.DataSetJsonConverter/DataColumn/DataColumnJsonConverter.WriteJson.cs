@@ -2,10 +2,11 @@
 using System.Data;
 using System.Linq;
 using Newtonsoft.Json;
+// ReSharper disable UnusedParameter.Local
 
 namespace DotNet.DataSetJsonConverter
 {
-    public partial class DataColumnJsonConverter : JsonConverter
+    public partial class DataColumnJsonConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
@@ -29,7 +30,13 @@ namespace DotNet.DataSetJsonConverter
             }
         }
 
-        private void Maximal(JsonWriter writer, DataColumn column, JsonSerializer serializer)
+        /// <summary>
+        /// Maximal
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="column"></param>
+        /// <param name="serializer"></param>
+        private static void Maximal(JsonWriter writer, DataColumn column, JsonSerializer serializer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("AutoIncrementSeed");
@@ -66,7 +73,13 @@ namespace DotNet.DataSetJsonConverter
             writer.WriteEndObject();
         }
 
-        private void Normal(JsonWriter writer, DataColumn column, JsonSerializer serializer)
+        /// <summary>
+        /// Normal
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="column"></param>
+        /// <param name="serializer"></param>
+        private static void Normal(JsonWriter writer, DataColumn column, JsonSerializer serializer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("AllowDBNull");
@@ -95,7 +108,13 @@ namespace DotNet.DataSetJsonConverter
             writer.WriteEndObject();
         }
 
-        private void Minimal(JsonWriter writer, DataColumn column, JsonSerializer serializer)
+        /// <summary>
+        /// Minimal
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="column"></param>
+        /// <param name="serializer"></param>
+        private static void Minimal(JsonWriter writer, DataColumn column, JsonSerializer serializer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("AllowDBNull");
@@ -113,7 +132,5 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WriteEndObject();
         }
-
-
     }
 }

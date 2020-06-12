@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.Data;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace DotNet.DataSetJsonConverter
 {

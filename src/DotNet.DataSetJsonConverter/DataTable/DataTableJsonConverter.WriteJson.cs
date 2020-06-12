@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Data;
-using System.Linq;
-using Newtonsoft.Json;
 
 namespace DotNet.DataSetJsonConverter
 {
@@ -10,7 +9,7 @@ namespace DotNet.DataSetJsonConverter
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             var table = value as DataTable;
-            if (table == null) throw new ArgumentNullException($"无法转换为{nameof(DataTable)}");
+            if (table == null) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 无法转换为{nameof(DataTable)}");
 
             switch (_level)
             {
@@ -41,6 +40,8 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WritePropertyName("TableName");
             writer.WriteValue(table.TableName);
+            writer.WritePropertyName("Namespace");
+            writer.WriteValue(table.Namespace);
 
             #region Columns
 
@@ -49,10 +50,7 @@ namespace DotNet.DataSetJsonConverter
             writer.WriteStartArray();
 
             var dataColumnJsonConverter = new DataColumnJsonConverter(level);
-            foreach (DataColumn column in table.Columns)
-            {
-                dataColumnJsonConverter.WriteJson(writer, column, serializer);
-            }
+            foreach (DataColumn column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
 
@@ -62,10 +60,7 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WritePropertyName("PrimaryKeys");
             writer.WriteStartArray();
-            foreach (var pkCol in table.PrimaryKey)
-            {
-                writer.WriteValue(pkCol.ColumnName);
-            }
+            foreach (var pkCol in table.PrimaryKey) writer.WriteValue(pkCol.ColumnName);
 
             writer.WriteEndArray();
 
@@ -119,10 +114,7 @@ namespace DotNet.DataSetJsonConverter
             writer.WriteStartArray();
 
             var dataColumnJsonConverter = new DataColumnJsonConverter(level);
-            foreach (DataColumn column in table.Columns)
-            {
-                dataColumnJsonConverter.WriteJson(writer, column, serializer);
-            }
+            foreach (DataColumn column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
 
@@ -132,10 +124,7 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WritePropertyName("PrimaryKeys");
             writer.WriteStartArray();
-            foreach (var pkCol in table.PrimaryKey)
-            {
-                writer.WriteValue(pkCol.ColumnName);
-            }
+            foreach (var pkCol in table.PrimaryKey) writer.WriteValue(pkCol.ColumnName);
 
             writer.WriteEndArray();
 
@@ -197,10 +186,7 @@ namespace DotNet.DataSetJsonConverter
             writer.WriteStartArray();
 
             var dataColumnJsonConverter = new DataColumnJsonConverter(level);
-            foreach (DataColumn column in table.Columns)
-            {
-                dataColumnJsonConverter.WriteJson(writer, column, serializer);
-            }
+            foreach (var column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
 
@@ -210,10 +196,7 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WritePropertyName("PrimaryKeys");
             writer.WriteStartArray();
-            foreach (var pkCol in table.PrimaryKey)
-            {
-                writer.WriteValue(pkCol.ColumnName);
-            }
+            foreach (var pkCol in table.PrimaryKey) writer.WriteValue(pkCol.ColumnName);
 
             writer.WriteEndArray();
 

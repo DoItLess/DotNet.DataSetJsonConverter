@@ -23,11 +23,35 @@ namespace DotNet.DataSetJsonConverter.Test
 
             var result = JsonConvert.DeserializeObject<DataTable>(json, new DataTableJsonConverter(ConvertLevel.Minimal));
 
-
             Assert.AreEqual(result?.TableName, source.TableName);
             Assert.AreEqual(result?.Namespace, source.Namespace);
             Assert.AreEqual(result?.Prefix, source.Prefix);
+            for (int i = 0; i < source.Columns.Count; i++)
+            {
+                Assert.AreEqual(source.Columns[i].Caption, result.Columns[i].Caption);
+                Assert.AreEqual(source.Columns[i].ColumnName, result.Columns[i].ColumnName);
+                Assert.AreEqual(source.Columns[i].DataType, result.Columns[i].DataType);
+                Assert.AreEqual(source.Columns[i].AllowDBNull, result.Columns[i].AllowDBNull);
+                Assert.AreEqual(source.Columns[i].Prefix, result.Columns[i].Prefix);
+            }
 
+            Assert.AreEqual(source.PrimaryKey.Length, result.PrimaryKey.Length);
+
+            for (int i = 0; i < source.PrimaryKey.Length; i++)
+            {
+                Assert.AreEqual(source.PrimaryKey[i].Caption, result.PrimaryKey[i].Caption);
+                Assert.AreEqual(source.PrimaryKey[i].ColumnName, result.PrimaryKey[i].ColumnName);
+                Assert.AreEqual(source.PrimaryKey[i].DataType, result.PrimaryKey[i].DataType);
+                Assert.AreEqual(source.PrimaryKey[i].AllowDBNull, result.PrimaryKey[i].AllowDBNull);
+            }
+
+            for (int i = 0; i < source.Rows.Count; i++)
+            {
+                foreach (DataColumn col in source.Columns)
+                {
+                    Assert.AreEqual(source.Rows[i][col.ColumnName], result.Rows[i][col.ColumnName]);
+                }
+            }
         }
 
 
@@ -47,11 +71,14 @@ namespace DotNet.DataSetJsonConverter.Test
             dataTable.Columns.Add(new DataColumn("FDateTime", typeof(DateTime)));
             dataTable.Columns.Add(new DataColumn("FBool", typeof(bool)));
 
-            dataTable.PrimaryKey = new[] {dataTable.Columns["FRowId"], dataTable.Columns["FString"]};
+            // dataTable.Columns["FString"].DefaultValue = "ddddddd";
+            // dataTable.Columns["FString"].AutoIncrement = true;
+
+            dataTable.PrimaryKey = new[] {dataTable.Columns["FRowId"]};
 
             var newRow = dataTable.NewRow();
             newRow["FRowId"]    = Guid.NewGuid().ToString();
-            newRow["FString"]   = Guid.NewGuid().ToString();
+            // newRow["FString"]   = Guid.NewGuid().ToString();
             newRow["FInt"]      = int.MaxValue;
             newRow["FLong"]     = long.MaxValue;
             newRow["FDecimal"]  = 12.555d;

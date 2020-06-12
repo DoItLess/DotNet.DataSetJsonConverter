@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DotNet.DataSetJsonConverter
 {
-    public partial class DataColumnJsonConverter : JsonConverter
+    public partial class DataColumnJsonConverter
     {
         public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
@@ -13,7 +13,8 @@ namespace DotNet.DataSetJsonConverter
 
             var column = new DataColumn();
 
-            JToken jToken = null;
+            // ReSharper disable once RedundantAssignment
+            JToken? jToken = null;
             jToken = jObject.SelectToken("AutoIncrementSeed");
             if (jToken != null) column.AutoIncrementSeed = jToken.Value<long>();
 
@@ -37,50 +38,9 @@ namespace DotNet.DataSetJsonConverter
             {
                 var dataTypeStr = jToken.Value<string>();
                 column.DataType = dataTypeStr == "Byte[]"
-                    ? typeof(Byte[])
+                    ? throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 暂不支持该类型")
                     : Type.GetType(string.Concat("System.", dataTypeStr));
             }
-
-            if (!column.AutoIncrement)
-            {
-                jToken = jObject.SelectToken("DefaultValue");
-                if (jToken != null && jToken.Type != JTokenType.Null)
-                {
-                    switch (Type.GetTypeCode(column.DataType))
-                    {
-                        case TypeCode.Boolean:
-                            column.DefaultValue = Convert.ToBoolean(jToken);
-                            break;
-                        case TypeCode.Byte:
-                            // todo
-                            break;
-                        case TypeCode.Char:
-                            column.DefaultValue = Convert.ToChar(jToken);
-                            break;
-                        case TypeCode.DateTime:
-                            column.DefaultValue = Convert.ToDateTime(jToken);
-                            break;
-                        case TypeCode.Decimal:
-                            column.DefaultValue = Convert.ToDecimal(jToken);
-                            break;
-                        case TypeCode.Double:
-                            column.DefaultValue = Convert.ToDouble(jToken);
-                            break;
-                        case TypeCode.Int32:
-                            column.DefaultValue = Convert.ToInt32(jToken);
-                            break;
-                        case TypeCode.Int64:
-                            column.DefaultValue = Convert.ToInt64(jToken);
-                            break;
-                        case TypeCode.String:
-                            column.DefaultValue = Convert.ToString(jToken);
-                            break;
-                        default:
-                            throw new Exception("不支持的类型");
-                    }
-                }
-            }
-
 
             jToken = jObject.SelectToken("MaxLength");
             if (jToken != null) column.MaxLength = jToken.Value<int>();
@@ -96,6 +56,19 @@ namespace DotNet.DataSetJsonConverter
 
             jToken = jObject.SelectToken("Unique");
             if (jToken != null) column.Unique = jToken.Value<bool>();
+
+            
+            // 自增列不允许设置 DefaultValue
+            // Cannot set AutoIncrement property for a column with DefaultValue set.
+            if (!column.AutoIncrement) 
+            {
+                jToken = jObject.SelectToken("DefaultValue");
+                if (jToken != null && jToken.Type != JTokenType.Null && jToken.Type != JTokenType.None)
+                {
+                    var typeCode = Type.GetTypeCode(column.DataType);
+                    column.DefaultValue = Convert.ChangeType(jToken, typeCode);
+                }
+            }
 
 
             return column;

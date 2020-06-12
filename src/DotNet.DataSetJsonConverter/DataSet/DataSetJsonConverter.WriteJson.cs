@@ -47,18 +47,12 @@ namespace DotNet.DataSetJsonConverter
                 
                 writer.WritePropertyName("ChildColumnNames");
                 writer.WriteStartArray();
-                foreach (DataColumn childColumn in relation.ChildColumns)
-                {
-                    writer.WriteValue(childColumn.ColumnName);
-                }
+                foreach (var childColumn in relation.ChildColumns) writer.WriteValue(childColumn.ColumnName);
                 writer.WriteEndArray();
 
                 writer.WritePropertyName("ParentColumnNames");
                 writer.WriteStartArray();
-                foreach (DataColumn parentColumn in relation.ParentColumns)
-                {
-                    writer.WriteValue(parentColumn.ColumnName);
-                }
+                foreach (var parentColumn in relation.ParentColumns) writer.WriteValue(parentColumn.ColumnName);
                 writer.WriteEndArray();
 
                 writer.WriteEndObject();
@@ -73,10 +67,7 @@ namespace DotNet.DataSetJsonConverter
             writer.WriteStartArray();
 
             var dataTableJsonConverter = new DataTableJsonConverter(_level);
-            foreach (DataTable table in dataSet.Tables)
-            {
-                dataTableJsonConverter.WriteJson(writer, table, serializer);
-            }
+            foreach (DataTable table in dataSet.Tables) dataTableJsonConverter.WriteJson(writer, table, serializer);
 
             writer.WriteEndArray();
 
