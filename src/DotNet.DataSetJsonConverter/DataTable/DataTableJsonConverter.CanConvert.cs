@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Newtonsoft.Json;
 
 namespace DotNet.DataSetJsonConverter
@@ -13,16 +12,10 @@ namespace DotNet.DataSetJsonConverter
             _level = level;
         }
 
-        public enum ConvertLevel
-        {
-            Minimal,
-            Normal,
-            Maximal,
-        }
 
         public override bool CanConvert(Type objectType)
         {
-            return typeof(DataTable).IsAssignableFrom(objectType);
+            return typeof(System.Data.DataTable).IsAssignableFrom(objectType);
         }
     }
 }

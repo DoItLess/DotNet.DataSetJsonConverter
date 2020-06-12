@@ -15,13 +15,13 @@ namespace DotNet.DataSetJsonConverter
             switch (_level)
             {
                 case ConvertLevel.Maximal:
-                    WriteJsonMaximal(writer, table, serializer);
+                    Maximal(writer, table, serializer, _level);
                     break;
                 case ConvertLevel.Normal:
-                    WriteJsonNormal(writer, table, serializer);
+                    Normal(writer, table, serializer, _level);
                     break;
                 case ConvertLevel.Minimal:
-                    WriteJsonMinimal(writer, table, serializer);
+                    Minimal(writer, table, serializer, _level);
                     break;
                 default:
                     throw new ArgumentException($"不存在的{_level}");
@@ -34,7 +34,8 @@ namespace DotNet.DataSetJsonConverter
         /// <param name="writer"></param>
         /// <param name="table"></param>
         /// <param name="serializer"></param>
-        private void WriteJsonMinimal(JsonWriter writer, DataTable table, JsonSerializer serializer)
+        /// <param name="level"></param>
+        private void Minimal(JsonWriter writer, DataTable table, JsonSerializer serializer, ConvertLevel level)
         {
             writer.WriteStartObject();
 
@@ -46,23 +47,11 @@ namespace DotNet.DataSetJsonConverter
             writer.WritePropertyName("Columns");
 
             writer.WriteStartArray();
+
+            var dataColumnJsonConverter = new DataColumnJsonConverter(level);
             foreach (DataColumn column in table.Columns)
             {
-                writer.WriteStartObject();
-                writer.WritePropertyName("AllowDBNull");
-                writer.WriteValue(column.AllowDBNull);
-                writer.WritePropertyName("Caption");
-                writer.WriteValue(column.Caption);
-                writer.WritePropertyName("ColumnName");
-                writer.WriteValue(column.ColumnName);
-                writer.WritePropertyName("DataType");
-                writer.WriteValue(column.DataType.Name);
-
-                // Extension 
-                writer.WritePropertyName("IsPrimaryKey");
-                writer.WriteValue(table.PrimaryKey.Contains(column));
-
-                writer.WriteEndObject();
+                dataColumnJsonConverter.WriteJson(writer, column, serializer);
             }
 
             writer.WriteEndArray();
@@ -113,10 +102,10 @@ namespace DotNet.DataSetJsonConverter
         /// <param name="writer"></param>
         /// <param name="table"></param>
         /// <param name="serializer"></param>
-        private void WriteJsonNormal(JsonWriter writer, DataTable table, JsonSerializer serializer)
+        /// <param name="level"></param>
+        private void Normal(JsonWriter writer, DataTable table, JsonSerializer serializer, ConvertLevel level)
         {
             writer.WriteStartObject();
-
 
             writer.WritePropertyName("Namespace");
             writer.WriteValue(table.Namespace);
@@ -128,33 +117,11 @@ namespace DotNet.DataSetJsonConverter
             writer.WritePropertyName("Columns");
 
             writer.WriteStartArray();
+
+            var dataColumnJsonConverter = new DataColumnJsonConverter(level);
             foreach (DataColumn column in table.Columns)
             {
-                writer.WriteStartObject();
-                writer.WritePropertyName("AllowDBNull");
-                writer.WriteValue(column.AllowDBNull);
-                writer.WritePropertyName("AutoIncrement");
-                writer.WriteValue(column.AutoIncrement);
-                writer.WritePropertyName("Caption");
-                writer.WriteValue(column.Caption);
-                writer.WritePropertyName("ColumnName");
-                writer.WriteValue(column.ColumnName);
-                writer.WritePropertyName("DataType");
-                writer.WriteValue(column.DataType.Name);
-                writer.WritePropertyName("DefaultValue");
-                writer.WriteValue(column.DefaultValue);
-                writer.WritePropertyName("MaxLength");
-                writer.WriteValue(column.MaxLength);
-                writer.WritePropertyName("ReadOnly");
-                writer.WriteValue(column.ReadOnly);
-                writer.WritePropertyName("Unique");
-                writer.WriteValue(column.Unique);
-
-                // Extension 
-                writer.WritePropertyName("IsPrimaryKey");
-                writer.WriteValue(table.PrimaryKey.Contains(column));
-
-                writer.WriteEndObject();
+                dataColumnJsonConverter.WriteJson(writer, column, serializer);
             }
 
             writer.WriteEndArray();
@@ -205,7 +172,8 @@ namespace DotNet.DataSetJsonConverter
         /// <param name="writer"></param>
         /// <param name="table"></param>
         /// <param name="serializer"></param>
-        private void WriteJsonMaximal(JsonWriter writer, DataTable table, JsonSerializer serializer)
+        /// <param name="level"></param>
+        private void Maximal(JsonWriter writer, DataTable table, JsonSerializer serializer, ConvertLevel level)
         {
             writer.WriteStartObject();
 
@@ -227,41 +195,11 @@ namespace DotNet.DataSetJsonConverter
             writer.WritePropertyName("Columns");
 
             writer.WriteStartArray();
+
+            var dataColumnJsonConverter = new DataColumnJsonConverter(level);
             foreach (DataColumn column in table.Columns)
             {
-                writer.WriteStartObject();
-                writer.WritePropertyName("AutoIncrementSeed");
-                writer.WriteValue(column.AutoIncrementSeed);
-                writer.WritePropertyName("AutoIncrementStep");
-                writer.WriteValue(column.AutoIncrementStep);
-                writer.WritePropertyName("AllowDBNull");
-                writer.WriteValue(column.AllowDBNull);
-                writer.WritePropertyName("AutoIncrement");
-                writer.WriteValue(column.AutoIncrement);
-                writer.WritePropertyName("Caption");
-                writer.WriteValue(column.Caption);
-                writer.WritePropertyName("ColumnName");
-                writer.WriteValue(column.ColumnName);
-                writer.WritePropertyName("DataType");
-                writer.WriteValue(column.DataType.Name);
-                writer.WritePropertyName("DefaultValue");
-                writer.WriteValue(column.DefaultValue);
-                writer.WritePropertyName("MaxLength");
-                writer.WriteValue(column.MaxLength);
-                writer.WritePropertyName("Namespace");
-                writer.WriteValue(column.Namespace);
-                writer.WritePropertyName("Prefix");
-                writer.WriteValue(column.Prefix);
-                writer.WritePropertyName("ReadOnly");
-                writer.WriteValue(column.ReadOnly);
-                writer.WritePropertyName("Unique");
-                writer.WriteValue(column.Unique);
-
-                // Extension 
-                writer.WritePropertyName("IsPrimaryKey");
-                writer.WriteValue(table.PrimaryKey.Contains(column));
-
-                writer.WriteEndObject();
+                dataColumnJsonConverter.WriteJson(writer, column, serializer);
             }
 
             writer.WriteEndArray();
