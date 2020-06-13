@@ -1,9 +1,9 @@
-using System;
-using System.Data;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
+using System.Data;
 
-namespace DotNet.JsonConverter.Test
+namespace DotNet.JsonConverters.Test
 {
     public class Tests
     {
@@ -17,11 +17,11 @@ namespace DotNet.JsonConverter.Test
         {
             var source = CreateTable("table1");
 
-            var json = JsonConvert.SerializeObject(source, Formatting.Indented, new JsonConverters.DataTableConverter(ConvertLevel.Minimal));
+            var json = JsonConvert.SerializeObject(source, Formatting.Indented, new DataTableConverter(ConvertLevel.Minimal));
 
             Console.WriteLine(json);
 
-            var result = JsonConvert.DeserializeObject<DataTable>(json, new JsonConverters.DataTableConverter(ConvertLevel.Minimal));
+            var result = JsonConvert.DeserializeObject<DataTable>(json, new DataTableConverter(ConvertLevel.Minimal));
 
             Assert.AreEqual(result?.TableName, source.TableName);
             Assert.AreEqual(result?.Namespace, source.Namespace);
@@ -77,7 +77,7 @@ namespace DotNet.JsonConverter.Test
             dataTable.PrimaryKey = new[] {dataTable.Columns["FRowId"]};
 
             var newRow = dataTable.NewRow();
-            newRow["FRowId"]    = Guid.NewGuid().ToString();
+            newRow["FRowId"] = Guid.NewGuid().ToString();
             // newRow["FString"]   = Guid.NewGuid().ToString();
             newRow["FInt"]      = int.MaxValue;
             newRow["FLong"]     = long.MaxValue;
@@ -123,9 +123,8 @@ namespace DotNet.JsonConverter.Test
             dataSet.Relations.Add(relation);
 
 
-
-            var converter = new JsonConverters.DataSetConverter(ConvertLevel.Minimal, DateTimeFormatStyle.TimeStampMillisecond);
-            var json = JsonConvert.SerializeObject(dataSet, Formatting.Indented,converter);
+            var converter = new DataSetConverter(ConvertLevel.Minimal, DateTimeFormatStyle.TimeStampMillisecond);
+            var json      = JsonConvert.SerializeObject(dataSet, Formatting.Indented, converter);
 
             Console.WriteLine(json);
 
