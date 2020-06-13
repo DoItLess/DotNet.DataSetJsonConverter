@@ -2,7 +2,7 @@
 using System.Data;
 using Newtonsoft.Json;
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
     public partial class DataSetConverter
     {
@@ -35,16 +35,16 @@ namespace DotNet.JsonConverter
 
                 writer.WritePropertyName("Nested");
                 writer.WriteValue(relation.Nested);
-                
+
                 writer.WritePropertyName("RelationName");
                 writer.WriteValue(relation.RelationName);
-                
+
                 writer.WritePropertyName("ChildTableName");
                 writer.WriteValue(relation.ChildTable.TableName);
-                
+
                 writer.WritePropertyName("ParentTableName");
                 writer.WriteValue(relation.ParentTable.TableName);
-                
+
                 writer.WritePropertyName("ChildColumnNames");
                 writer.WriteStartArray();
                 foreach (var childColumn in relation.ChildColumns) writer.WriteValue(childColumn.ColumnName);
@@ -57,6 +57,7 @@ namespace DotNet.JsonConverter
 
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             #endregion
@@ -66,7 +67,7 @@ namespace DotNet.JsonConverter
             writer.WritePropertyName("Tables");
             writer.WriteStartArray();
 
-            var dataTableJsonConverter = new DataTableConverter(_level, _dateTimeFormatType);
+            var dataTableJsonConverter = new DataTableConverter(_level, _dateTimeFormatStyle);
             foreach (DataTable table in dataSet.Tables) dataTableJsonConverter.WriteJson(writer, table, serializer);
 
             writer.WriteEndArray();

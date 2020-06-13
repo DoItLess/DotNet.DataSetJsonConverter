@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet.JsonConverter", "DotNet.JsonConverter\DotNet.JsonConverter.csproj", "{34A8D921-24B3-429A-9749-7E2BE817CF87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet.JsonConverters", "DotNet.JsonConverters\DotNet.JsonConverters.csproj", "{34A8D921-24B3-429A-9749-7E2BE817CF87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.JsonConverter.Test", "DotNet.JsonConverter.Test\DotNet.JsonConverter.Test.csproj", "{00E79831-1D97-4DA4-ACC1-92F2EC35C0A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.JsonConverters.Test", "DotNet.JsonConverters.Test\DotNet.JsonConverters.Test.csproj", "{00E79831-1D97-4DA4-ACC1-92F2EC35C0A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 // ReSharper disable UnusedParameter.Local
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
     public partial class DataColumnConverter
     {

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Data;
+using Newtonsoft.Json;
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
-    public partial class DataColumnConverter : Newtonsoft.Json.JsonConverter
+    public partial class DataColumnConverter : JsonConverter
     {
         private readonly ConvertLevel _level;
 

@@ -17,11 +17,11 @@ namespace DotNet.JsonConverter.Test
         {
             var source = CreateTable("table1");
 
-            var json = JsonConvert.SerializeObject(source, Formatting.Indented, new DataTableConverter(ConvertLevel.Minimal));
+            var json = JsonConvert.SerializeObject(source, Formatting.Indented, new JsonConverters.DataTableConverter(ConvertLevel.Minimal));
 
             Console.WriteLine(json);
 
-            var result = JsonConvert.DeserializeObject<DataTable>(json, new DataTableConverter(ConvertLevel.Minimal));
+            var result = JsonConvert.DeserializeObject<DataTable>(json, new JsonConverters.DataTableConverter(ConvertLevel.Minimal));
 
             Assert.AreEqual(result?.TableName, source.TableName);
             Assert.AreEqual(result?.Namespace, source.Namespace);
@@ -124,7 +124,7 @@ namespace DotNet.JsonConverter.Test
 
 
 
-            var converter = new DataSetConverter(ConvertLevel.Minimal, DateTimeFormatType.TimeStampMillisecond);
+            var converter = new JsonConverters.DataSetConverter(ConvertLevel.Minimal, DateTimeFormatStyle.TimeStampMillisecond);
             var json = JsonConvert.SerializeObject(dataSet, Formatting.Indented,converter);
 
             Console.WriteLine(json);

@@ -4,7 +4,7 @@ using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
     public partial class DataSetConverter
     {
@@ -14,13 +14,13 @@ namespace DotNet.JsonConverter
 
             #region 校验
 
-            if (jObject == null) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : Json 转换失败");
-            if (!jObject.ContainsKey("Tables")) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : 缺少 Tables 属性");
-            if (jObject["Tables"] == null || jObject["Tables"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : Tables 为空");
-            if (jObject["Tables"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : Tables 类型错误");
-            if (!jObject.ContainsKey("Relations")) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : 缺少 Relations 属性");
-            if (jObject["Relations"] == null || jObject["Relations"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : Relations 为空");
-            if (jObject["Relations"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : Relations 类型错误");
+            if (jObject == null) throw new JsonException($"{nameof(DataSetConverter)} Error : Json 转换失败");
+            if (!jObject.ContainsKey("Tables")) throw new JsonException($"{nameof(DataSetConverter)} Error : 缺少 Tables 属性");
+            if (jObject["Tables"] == null || jObject["Tables"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(DataSetConverter)} Error : Tables 为空");
+            if (jObject["Tables"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(DataSetConverter)} Error : Tables 类型错误");
+            if (!jObject.ContainsKey("Relations")) throw new JsonException($"{nameof(DataSetConverter)} Error : 缺少 Relations 属性");
+            if (jObject["Relations"] == null || jObject["Relations"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(DataSetConverter)} Error : Relations 为空");
+            if (jObject["Relations"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(DataSetConverter)} Error : Relations 类型错误");
 
             #endregion
 
@@ -40,14 +40,14 @@ namespace DotNet.JsonConverter
 
             #region Tables
 
-            var dataTableJsonConverter = new DataTableConverter(_level, _dateTimeFormatType);
+            var dataTableJsonConverter = new DataTableConverter(_level, _dateTimeFormatStyle);
 
             foreach (var jToken in jObject["Tables"]!)
             {
                 var tableReader = jToken.CreateReader();
 
                 var convertResult = dataTableJsonConverter.ReadJson(tableReader, typeof(DataTable), null, serializer);
-                if (!(convertResult is DataTable dataTable)) throw new JsonException($"{nameof(JsonConverter.DataSetConverter)} Error : DataTable 转换失败");
+                if (!(convertResult is DataTable dataTable)) throw new JsonException($"{nameof(DataSetConverter)} Error : DataTable 转换失败");
                 dataSet.Tables.Add(dataTable);
             }
 
@@ -66,21 +66,13 @@ namespace DotNet.JsonConverter
                 var parentColumns = new List<DataColumn>();
 
                 if (jToken["ParentColumnNames"] != null)
-                {
                     foreach (var pCol in jToken["ParentColumnNames"]!)
-                    {
                         parentColumns.Add(dataSet.Tables[parentTableName].Columns[pCol.Value<string>()]);
-                    }
-                }
 
                 var childColumns = new List<DataColumn>();
                 if (jToken["ChildColumnNames"] != null)
-                {
                     foreach (var cCol in jToken["ChildColumnNames"]!)
-                    {
                         childColumns.Add(dataSet.Tables[childTableName].Columns[cCol.Value<string>()]);
-                    }
-                }
 
                 var relation = new DataRelation(relationName, parentColumns.ToArray(), childColumns.ToArray()) {Nested = nested};
                 dataSet.Relations.Add(relation);

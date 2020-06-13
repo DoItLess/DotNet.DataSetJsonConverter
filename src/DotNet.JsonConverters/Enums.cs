@@ -1,4 +1,4 @@
-﻿namespace DotNet.JsonConverter
+﻿namespace DotNet.JsonConverters
 {
     /// <summary>
     /// 转换级别
@@ -18,18 +18,22 @@
         /// <summary>
         /// 最大
         /// </summary>
-        Maximal,
+        Maximal
     }
 
-    public enum DateTimeFormatType
+    /// <summary>
+    /// 时间类型转换风格
+    /// </summary>
+    public enum DateTimeFormatStyle
     {
         /// <summary>
         /// 默认
         /// </summary>
         Default,
+
         /// <summary>
         /// 时间戳,毫秒,long
         /// </summary>
-        TimeStampMillisecond,
+        TimeStampMillisecond
     }
 }

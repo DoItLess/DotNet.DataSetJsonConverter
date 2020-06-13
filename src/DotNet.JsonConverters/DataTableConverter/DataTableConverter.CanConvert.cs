@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Data;
+using Newtonsoft.Json;
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
-    public partial class DataTableConverter : Newtonsoft.Json.JsonConverter
+    public partial class DataTableConverter : JsonConverter
     {
-        private readonly ConvertLevel       _level;
-        private readonly DateTimeFormatType _dateTimeFormatType;
+        private readonly ConvertLevel        _level;
+        private readonly DateTimeFormatStyle _dateTimeFormatStyle;
 
-        public DataTableConverter(ConvertLevel level = ConvertLevel.Normal, DateTimeFormatType type = DateTimeFormatType.Default)
+        public DataTableConverter(ConvertLevel level = ConvertLevel.Normal, DateTimeFormatStyle style = DateTimeFormatStyle.Default)
         {
-            _level              = level;
-            _dateTimeFormatType = type;
+            _level               = level;
+            _dateTimeFormatStyle = style;
         }
 
 
@@ -27,7 +28,7 @@ namespace DotNet.JsonConverter
         /// <returns></returns>
         private static long DateTimeToMilliseconds(DateTime dateTime)
         {
-            var startTime = new DateTime(1970,1,1);
+            var startTime = new DateTime(1970, 1, 1);
             return (long) (dateTime - startTime).TotalMilliseconds;
         }
 
@@ -38,7 +39,7 @@ namespace DotNet.JsonConverter
         /// <returns></returns>
         private static DateTime MillisecondsToDateTime(long milliseconds)
         {
-            var startTime = new DateTime(1970,1,1);
+            var startTime = new DateTime(1970, 1, 1);
             return startTime.AddMilliseconds(milliseconds);
         }
     }

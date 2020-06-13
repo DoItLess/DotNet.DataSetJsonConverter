@@ -3,7 +3,7 @@ using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
     public partial class DataColumnConverter
     {
@@ -57,10 +57,10 @@ namespace DotNet.JsonConverter
             jToken = jObject.SelectToken("Unique");
             if (jToken != null) column.Unique = jToken.Value<bool>();
 
-            
+
             // 自增列不允许设置 DefaultValue
             // Cannot set AutoIncrement property for a column with DefaultValue set.
-            if (!column.AutoIncrement) 
+            if (!column.AutoIncrement)
             {
                 jToken = jObject.SelectToken("DefaultValue");
                 if (jToken != null && jToken.Type != JTokenType.Null && jToken.Type != JTokenType.None)

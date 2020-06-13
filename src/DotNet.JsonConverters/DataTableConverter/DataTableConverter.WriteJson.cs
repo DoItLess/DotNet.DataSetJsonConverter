@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Data;
-using Newtonsoft.Json;
 
 // ReSharper disable UnusedParameter.Local
 
-namespace DotNet.JsonConverter
+namespace DotNet.JsonConverters
 {
     public partial class DataTableConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             var table = value as DataTable;
-            if (table == null) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : 无法转换为{nameof(DataTable)}");
+            if (table == null) throw new JsonException($"{nameof(DataTableConverter)} Error : 无法转换为{nameof(DataTable)}");
 
             switch (_level)
             {
@@ -51,7 +51,7 @@ namespace DotNet.JsonConverter
 
             writer.WriteStartArray();
 
-            var dataColumnJsonConverter = new JsonConverter.DataColumnConverter(level);
+            var dataColumnJsonConverter = new DataColumnConverter(level);
             foreach (DataColumn column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
@@ -100,7 +100,7 @@ namespace DotNet.JsonConverter
 
             writer.WriteStartArray();
 
-            var dataColumnJsonConverter = new JsonConverter.DataColumnConverter(level);
+            var dataColumnJsonConverter = new DataColumnConverter(level);
             foreach (DataColumn column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
@@ -157,7 +157,7 @@ namespace DotNet.JsonConverter
 
             writer.WriteStartArray();
 
-            var dataColumnJsonConverter = new JsonConverter.DataColumnConverter(level);
+            var dataColumnJsonConverter = new DataColumnConverter(level);
             foreach (var column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
@@ -195,7 +195,7 @@ namespace DotNet.JsonConverter
                 {
                     writer.WritePropertyName(col.ColumnName);
 
-                    var isSpecial = Type.GetTypeCode(col.DataType) == TypeCode.DateTime && _dateTimeFormatType == DateTimeFormatType.TimeStampMillisecond;
+                    var isSpecial = Type.GetTypeCode(col.DataType) == TypeCode.DateTime && _dateTimeFormatStyle == DateTimeFormatStyle.TimeStampMillisecond;
 
                     var value = isSpecial
                         ? DateTimeToMilliseconds(Convert.ToDateTime(row[col.ColumnName]))
