@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Data;
+using Newtonsoft.Json;
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataSetJsonConverter
+    public partial class DataSetConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
@@ -66,7 +66,7 @@ namespace DotNet.DataSetJsonConverter
             writer.WritePropertyName("Tables");
             writer.WriteStartArray();
 
-            var dataTableJsonConverter = new DataTableJsonConverter(_level, _dateTimeFormatType);
+            var dataTableJsonConverter = new DataTableConverter(_level, _dateTimeFormatType);
             foreach (DataTable table in dataSet.Tables) dataTableJsonConverter.WriteJson(writer, table, serializer);
 
             writer.WriteEndArray();

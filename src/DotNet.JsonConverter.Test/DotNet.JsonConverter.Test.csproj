@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DotNet.DataSetJsonConverter\DotNet.DataSetJsonConverter.csproj" />
+    <ProjectReference Include="..\DotNet.JsonConverter\DotNet.JsonConverter.csproj" />
   </ItemGroup>
 
 </Project>

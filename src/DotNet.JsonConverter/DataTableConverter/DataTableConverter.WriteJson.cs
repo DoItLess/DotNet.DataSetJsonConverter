@@ -1,16 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Data;
+using Newtonsoft.Json;
+
 // ReSharper disable UnusedParameter.Local
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataTableJsonConverter
+    public partial class DataTableConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             var table = value as DataTable;
-            if (table == null) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 无法转换为{nameof(DataTable)}");
+            if (table == null) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : 无法转换为{nameof(DataTable)}");
 
             switch (_level)
             {
@@ -50,7 +51,7 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WriteStartArray();
 
-            var dataColumnJsonConverter = new DataColumnJsonConverter(level);
+            var dataColumnJsonConverter = new JsonConverter.DataColumnConverter(level);
             foreach (DataColumn column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
@@ -99,7 +100,7 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WriteStartArray();
 
-            var dataColumnJsonConverter = new DataColumnJsonConverter(level);
+            var dataColumnJsonConverter = new JsonConverter.DataColumnConverter(level);
             foreach (DataColumn column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();
@@ -156,7 +157,7 @@ namespace DotNet.DataSetJsonConverter
 
             writer.WriteStartArray();
 
-            var dataColumnJsonConverter = new DataColumnJsonConverter(level);
+            var dataColumnJsonConverter = new JsonConverter.DataColumnConverter(level);
             foreach (var column in table.Columns) dataColumnJsonConverter.WriteJson(writer, column, serializer);
 
             writer.WriteEndArray();

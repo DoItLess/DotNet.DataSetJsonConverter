@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataTableJsonConverter
+    public partial class DataTableConverter
     {
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
@@ -14,16 +14,16 @@ namespace DotNet.DataSetJsonConverter
 
             #region 校验
 
-            if (jObject == null) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : Json 转换失败");
-            if (!jObject.ContainsKey("Columns")) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 缺少 Columns 属性");
-            if (jObject["Columns"] == null || jObject["Columns"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : Columns 为空");
-            if (jObject["Columns"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : Columns 类型错误");
-            if (!jObject.ContainsKey("PrimaryKeys")) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 缺少 PrimaryKeys 属性");
-            if (jObject["PrimaryKeys"] == null || jObject["PrimaryKeys"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : PrimaryKeys 为空");
-            if (jObject["PrimaryKeys"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : PrimaryKeys 类型错误");
-            if (!jObject.ContainsKey("Rows")) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 缺少 Rows 属性");
-            if (jObject["Rows"] == null || jObject["Rows"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : Rows 为空");
-            if (jObject["Rows"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : Rows 类型错误");
+            if (jObject == null) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : Json 转换失败");
+            if (!jObject.ContainsKey("Columns")) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : 缺少 Columns 属性");
+            if (jObject["Columns"] == null || jObject["Columns"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : Columns 为空");
+            if (jObject["Columns"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : Columns 类型错误");
+            if (!jObject.ContainsKey("PrimaryKeys")) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : 缺少 PrimaryKeys 属性");
+            if (jObject["PrimaryKeys"] == null || jObject["PrimaryKeys"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : PrimaryKeys 为空");
+            if (jObject["PrimaryKeys"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : PrimaryKeys 类型错误");
+            if (!jObject.ContainsKey("Rows")) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : 缺少 Rows 属性");
+            if (jObject["Rows"] == null || jObject["Rows"]!.Type == JTokenType.Null) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : Rows 为空");
+            if (jObject["Rows"]!.Type != JTokenType.Array) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : Rows 类型错误");
 
             #endregion
 
@@ -40,7 +40,7 @@ namespace DotNet.DataSetJsonConverter
 
             if (jObject["Namespace"] != null) table.Namespace = jObject.Value<string>("Namespace");
 
-            var columnJsonConverter = new DataColumnJsonConverter(_level);
+            var columnJsonConverter = new JsonConverter.DataColumnConverter(_level);
 
             #region Columns
 
@@ -60,7 +60,7 @@ namespace DotNet.DataSetJsonConverter
             foreach (var jpkToken in jObject["PrimaryKeys"]!)
             {
                 var colName = jpkToken.Value<string>();
-                if (!table.Columns.Contains(colName)) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : PrimaryKeys 中 {colName} 不存在");
+                if (!table.Columns.Contains(colName)) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : PrimaryKeys 中 {colName} 不存在");
                 pkCols.Add(table.Columns[colName]);
             }
 
@@ -72,7 +72,7 @@ namespace DotNet.DataSetJsonConverter
 
             foreach (var jToken in jObject["Rows"]!)
             {
-                if (jToken.Type != JTokenType.Object) throw new JsonException($"{nameof(DataTableJsonConverter)} Error : Rows Array 中对象类型错误，必须是 Json{nameof(JTokenType.Object)}");
+                if (jToken.Type != JTokenType.Object) throw new JsonException($"{nameof(JsonConverter.DataTableConverter)} Error : Rows Array 中对象类型错误，必须是 Json{nameof(JTokenType.Object)}");
                 var row = table.NewRow();
                 foreach (DataColumn col in table.Columns)
                 {

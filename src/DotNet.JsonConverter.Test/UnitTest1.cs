@@ -3,7 +3,7 @@ using System.Data;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace DotNet.DataSetJsonConverter.Test
+namespace DotNet.JsonConverter.Test
 {
     public class Tests
     {
@@ -17,11 +17,11 @@ namespace DotNet.DataSetJsonConverter.Test
         {
             var source = CreateTable("table1");
 
-            var json = JsonConvert.SerializeObject(source, Formatting.Indented, new DataTableJsonConverter(ConvertLevel.Minimal));
+            var json = JsonConvert.SerializeObject(source, Formatting.Indented, new DataTableConverter(ConvertLevel.Minimal));
 
             Console.WriteLine(json);
 
-            var result = JsonConvert.DeserializeObject<DataTable>(json, new DataTableJsonConverter(ConvertLevel.Minimal));
+            var result = JsonConvert.DeserializeObject<DataTable>(json, new DataTableConverter(ConvertLevel.Minimal));
 
             Assert.AreEqual(result?.TableName, source.TableName);
             Assert.AreEqual(result?.Namespace, source.Namespace);
@@ -124,7 +124,7 @@ namespace DotNet.DataSetJsonConverter.Test
 
 
 
-            var converter = new DataSetJsonConverter(ConvertLevel.Minimal, DateTimeFormatType.TimeStampMillisecond);
+            var converter = new DataSetConverter(ConvertLevel.Minimal, DateTimeFormatType.TimeStampMillisecond);
             var json = JsonConvert.SerializeObject(dataSet, Formatting.Indented,converter);
 
             Console.WriteLine(json);

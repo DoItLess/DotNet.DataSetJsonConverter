@@ -1,4 +1,4 @@
-﻿namespace DotNet.DataSetJsonConverter
+﻿namespace DotNet.JsonConverter
 {
     /// <summary>
     /// 转换级别

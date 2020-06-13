@@ -3,9 +3,9 @@ using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataColumnJsonConverter
+    public partial class DataColumnConverter
     {
         public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
@@ -38,7 +38,7 @@ namespace DotNet.DataSetJsonConverter
             {
                 var dataTypeStr = jToken.Value<string>();
                 column.DataType = dataTypeStr == "Byte[]"
-                    ? throw new JsonException($"{nameof(DataTableJsonConverter)} Error : 暂不支持该类型")
+                    ? throw new JsonException($"{nameof(DataTableConverter)} Error : 暂不支持该类型")
                     : Type.GetType(string.Concat("System.", dataTypeStr));
             }
 

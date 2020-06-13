@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Data;
-using Newtonsoft.Json;
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataColumnJsonConverter : JsonConverter
+    public partial class DataColumnConverter : Newtonsoft.Json.JsonConverter
     {
         private readonly ConvertLevel _level;
 
-        public DataColumnJsonConverter(ConvertLevel level = ConvertLevel.Normal)
+        public DataColumnConverter(ConvertLevel level = ConvertLevel.Normal)
         {
             _level = level;
         }

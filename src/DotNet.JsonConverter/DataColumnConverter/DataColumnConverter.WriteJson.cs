@@ -2,11 +2,12 @@
 using System.Data;
 using System.Linq;
 using Newtonsoft.Json;
+
 // ReSharper disable UnusedParameter.Local
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataColumnJsonConverter
+    public partial class DataColumnConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {

@@ -1,15 +1,14 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Data;
 
-namespace DotNet.DataSetJsonConverter
+namespace DotNet.JsonConverter
 {
-    public partial class DataSetJsonConverter:JsonConverter
+    public partial class DataSetConverter:Newtonsoft.Json.JsonConverter
     {
         private readonly ConvertLevel _level;
         private readonly DateTimeFormatType _dateTimeFormatType;
 
-        public DataSetJsonConverter(ConvertLevel level = ConvertLevel.Normal, DateTimeFormatType type = DateTimeFormatType.Default)
+        public DataSetConverter(ConvertLevel level = ConvertLevel.Normal, DateTimeFormatType type = DateTimeFormatType.Default)
         {
             _level = level;
             _dateTimeFormatType = type;
