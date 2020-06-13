@@ -7,40 +7,18 @@ namespace DotNet.JsonConverters
     public partial class DataTableConverter : JsonConverter
     {
         private readonly ConvertLevel        _level;
-        private readonly DateTimeFormatStyle _dateTimeFormatStyle;
+        private readonly DateTimeFormatStyle _style;
 
         public DataTableConverter(ConvertLevel level = ConvertLevel.Normal, DateTimeFormatStyle style = DateTimeFormatStyle.Default)
         {
-            _level               = level;
-            _dateTimeFormatStyle = style;
+            _level = level;
+            _style = style;
         }
 
 
         public override bool CanConvert(Type objectType)
         {
             return typeof(DataTable).IsAssignableFrom(objectType);
-        }
-
-        /// <summary>
-        /// DateTime 转 时间戳，毫秒
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        private static long DateTimeToMilliseconds(DateTime dateTime)
-        {
-            var startTime = new DateTime(1970, 1, 1);
-            return (long) (dateTime - startTime).TotalMilliseconds;
-        }
-
-        /// <summary>
-        /// 时间戳，毫秒 转 DateTime
-        /// </summary>
-        /// <param name="milliseconds"></param>
-        /// <returns></returns>
-        private static DateTime MillisecondsToDateTime(long milliseconds)
-        {
-            var startTime = new DateTime(1970, 1, 1);
-            return startTime.AddMilliseconds(milliseconds);
         }
     }
 }

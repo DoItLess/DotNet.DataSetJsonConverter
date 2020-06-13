@@ -195,12 +195,10 @@ namespace DotNet.JsonConverters
                 {
                     writer.WritePropertyName(col.ColumnName);
 
-                    var isSpecial = Type.GetTypeCode(col.DataType) == TypeCode.DateTime && _dateTimeFormatStyle == DateTimeFormatStyle.TimeStampMillisecond;
+                    var isDateTime = Type.GetTypeCode(col.DataType) == TypeCode.DateTime;
 
-                    var value = isSpecial
-                        ? DateTimeToMilliseconds(Convert.ToDateTime(row[col.ColumnName]))
-                        : row[col.ColumnName];
-                    writer.WriteValue(value);
+                    if (isDateTime) new DateTimeConverter(_style).WriteJson(writer, row[col.ColumnName], serializer);
+                    else writer.WriteValue(row[col.ColumnName]);
                 }
 
                 writer.WriteEndObject();

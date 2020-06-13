@@ -78,12 +78,22 @@ namespace DotNet.JsonConverters
                 {
                     var jValue = jToken[col.ColumnName];
 
-                    var isSpecial = Type.GetTypeCode(col.DataType) == TypeCode.DateTime && _dateTimeFormatStyle == DateTimeFormatStyle.TimeStampMillisecond;
-                    row[col.ColumnName] = isSpecial
-                        ? MillisecondsToDateTime(jValue.ToObject<long>())
-                        : jValue == null
-                            ? col.DefaultValue
-                            : jValue.ToObject<object>();
+                    var isDateTime = Type.GetTypeCode(col.DataType) == TypeCode.DateTime;
+                    
+                    if (jValue == null)
+                    {
+                        row[col.ColumnName] = col.DefaultValue;
+                        continue;
+                    }
+
+                    if (isDateTime)
+                    {
+                        var dtReader = jValue.CreateReader();
+                        row[col.ColumnName] = new DateTimeConverter(_style).ReadJson(dtReader, col.DataType, existingValue, serializer);
+                        continue;
+                    }
+
+                    row[col.ColumnName] = jValue.ToObject<object>();
                 }
 
                 table.Rows.Add(row);

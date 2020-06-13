@@ -158,5 +158,20 @@ namespace DotNet.JsonConverters.Test
 
             return dataTable;
         }
+
+        [Test]
+        public void Test3()
+        {
+            var source = new DateTime(2020, 4,1,12,23,45);
+            var converter = new DateTimeConverter(DateTimeFormatStyle.TimeStampMillisecond);
+            var json = JsonConvert.SerializeObject(source, converter);
+            Console.WriteLine(json);
+
+            var result = JsonConvert.DeserializeObject<DateTime>(json, converter);
+
+            Assert.AreEqual(result.Date, source.Date);
+            Assert.AreEqual(result.Year, source.Year);
+            Assert.AreEqual(result, source);
+        }
     }
 }
