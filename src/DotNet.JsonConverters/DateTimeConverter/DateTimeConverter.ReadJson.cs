@@ -11,6 +11,7 @@ namespace DotNet.JsonConverters
         {
             var jToken = JToken.Load(reader);
 
+            if (jToken.Type == JTokenType.Null) return DBNull.Value;
 
             switch (_style)
             {

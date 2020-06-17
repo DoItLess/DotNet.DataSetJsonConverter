@@ -4,6 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
+    <Version>0.0.1-beta2</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>DoItLess.DotNet.JsonConverters</PackageId>
+    <Authors>DoItLess</Authors>
+    <Company>DoItLess</Company>
+    <Product>DoItLess.DotNet.JsonConverters</Product>
   </PropertyGroup>
 
   <ItemGroup>

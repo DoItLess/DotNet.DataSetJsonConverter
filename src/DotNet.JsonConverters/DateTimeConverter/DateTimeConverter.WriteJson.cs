@@ -10,6 +10,11 @@ namespace DotNet.JsonConverters
         {
             #region 校验
 
+            if (value == null || value == DBNull.Value)
+            {
+                writer.WriteNull();
+                return;
+            }
             if (!(value is DateTime dateTime)) throw new JsonException($"{nameof(DateTimeConverter)} Error : 无法转换为{nameof(DateTime)}");
 
             #endregion
